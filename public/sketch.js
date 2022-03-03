@@ -25,9 +25,9 @@ function setup() {
     PinkFlower1 = new PinkFlower();
     RedFlower1 = new RedFlower();
 
-    socket = io.connect('http://localhost:3000')
+    socket = io.connect('https://give-flowers.herokuapp.com')
     socket.on('click', updateSwitch);
-
+``
     stroke(255);
     background(0);
     fill(255);
