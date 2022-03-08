@@ -124,7 +124,7 @@ function showFlowers() {
     console.log('window height is '+ windowHeight);
     background(0);
     
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 10; i++) {
 
         var da_color = int(random(0,4));
         var da_petals = int(random(0,4));
