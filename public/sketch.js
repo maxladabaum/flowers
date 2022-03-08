@@ -122,7 +122,6 @@ function draw() {
 function showFlowers() {
     console.log('window width is '+ windowWidth);
     console.log('window height is '+ windowHeight);
-    background(0);
     
     for (var i = 0; i < 10; i++) {
 
@@ -140,6 +139,10 @@ function showFlowers() {
         console.log("xcord is " + transx);
         console.log("ycord is " + transy);
         console.log("the current i is "+ i);
+
+        if (i==0){
+            background(0);
+        }
         
         if (da_color == 1 && a_bool) {
             if (da_petals == 1) {
