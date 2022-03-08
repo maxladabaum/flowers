@@ -20,12 +20,14 @@ var pink_petal_height;
 
 function setup() {
     initializeFields();
-    createCanvas(800, 800);
+    createCanvas(windowWidth, windowHeight);
     GreenFlower1 = new GreenFlower();
     PinkFlower1 = new PinkFlower();
     RedFlower1 = new RedFlower();
 
-    socket = io.connect('https://give-flowers.herokuapp.com')
+    socket = io.connect('http://localhost:3000')
+    socket.on('sentSync', getSync);
+    socket.on('requestSync', syncRequested);
     socket.on('click', updateSwitch);
 ``
     stroke(255);
@@ -34,11 +36,13 @@ function setup() {
     textSize(36);
     text("give flower", 40, 120);
     text("request flower", 40, 220);
+
+    requestSync();
 }
 
 function initializeFields() {
-    sendSwitchVal = -1;
-    recSwitchVal = -1;
+    sendSwitchVal = 0;
+    recSwitchVal = 0;
 
     green_petal_width = 518 / 5;
     green_petal_height = 794 / 5;
@@ -49,14 +53,29 @@ function initializeFields() {
 }
 
 function updateSwitch(updatedSwitchVal){
+    recSwitchVal+=updatedSwitchVal;
+    console.log("total switchVal " + recSwitchVal);
+}
+
+function requestSync(){
+    socket.emit('requestSync');
+    console.log('requested a sync');
+}
+
+function syncRequested(){
+    socket.emit('sentSync', recSwitchVal);
+    console.log('sent the sync ' + recSwitchVal);
+}
+
+function getSync(updatedSwitchVal){
     recSwitchVal=updatedSwitchVal;
-    console.log("recieved switchVal" + recSwitchVal)
+    console.log("synced switch val is now " + recSwitchVal);
 }
 
 function mouseClicked() {
     if (mouseY>80 && mouseY<200) {
         sendSwitchVal = 1;
-        socket.emit('click', sendSwitchVal)
+        socket.emit('click', sendSwitchVal);
 
         stroke(255);
         background(0);
@@ -65,24 +84,12 @@ function mouseClicked() {
         text("flowers sent", 40, 120);
     }
     if (mouseY>200 && mouseY<400 && recSwitchVal > 0) {
-        sendSwitchVal = -2;
-        socket.emit('click', sendSwitchVal)
+        sendSwitchVal = -1;
+        socket.emit('click', sendSwitchVal);
         
-        background(0);
-        translate(200,200);
-        RedFlower1.fullFlower9(1);
-        translate(200,200);
-        PinkFlower1.fullFlower7(1);
-        translate(200,250);
-        GreenFlower1.fullFlower7(1.3);
-        translate(-500,100);
-        PinkFlower1.fullFlower5(1);
-        translate(50,-300);
-        GreenFlower1.fullFlower5(1.4);
+        showFlowers2();
     }
-    if (mouseY>200 && mouseY<400 && recSwitchVal<0) {
-        sendSwitchVal = -3;
-        socket.emit('click', sendSwitchVal)
+    if (mouseY>200 && mouseY<400 && recSwitchVal<=0) {
         
         stroke(255);
         background(0);
@@ -91,8 +98,6 @@ function mouseClicked() {
         text("sorry, nobody sent you flowers", 40, 120);
     }
     if (mouseY>400) {
-        sendSwitchVal = -4;
-        socket.emit('click', sendSwitchVal)
 
         stroke(255);
         background(0);
@@ -101,6 +106,7 @@ function mouseClicked() {
         text("give flower", 40, 120);
         text("request flower", 40, 220);
     }
+    requestSync();
 }
 
 function draw() {
@@ -120,8 +126,80 @@ function draw() {
 
 
 
+function showFlowers() {
+    background(0);
+    translate(200,200);
+    RedFlower1.fullFlower9(1);
+    translate(200,200);
+    PinkFlower1.fullFlower7(1);
+    translate(200,250);
+    GreenFlower1.fullFlower7(1.3);
+    translate(-500,100);
+    PinkFlower1.fullFlower5(1);
+    translate(50,-300);
+    GreenFlower1.fullFlower5(1.4);
+}
+
+function showFlowers2() {
+    console.log('window width is '+ windowWidth);
+    console.log('window height is '+ windowHeight);
+    background(0);
+    
+    for (var i = 0; i < 5; i++) {
+
+        var da_color = int(random(0,4));
+        var da_petals = int(random(0,4));
+        var da_size = random(0.7,3);
+        var transx = int(random(0,windowWidth));
+        var transy = int(random(0,windowWidth));
+        var a_bool = true;
 
 
+        push();
+        translate(transx,transy);
+
+        console.log("xcord is " + transx);
+        console.log("ycord is " + transy);
+        console.log("the current i is "+ i);
+        
+        if (da_color == 1 && a_bool) {
+            if (da_petals == 1) {
+                RedFlower1.fullFlower5(da_size);
+            }
+            if (da_petals == 2) {
+                RedFlower1.fullFlower7(da_size);
+            }
+            if (da_petals == 3) {
+                RedFlower1.fullFlower9(da_size);
+            }
+        }
+
+        if (da_color == 2 && a_bool) {
+            if (da_petals == 1) {
+                GreenFlower1.fullFlower5(da_size);
+            }
+            if (da_petals == 2) {
+                GreenFlower1.fullFlower7(da_size);
+            }
+            if (da_petals == 3) {
+                GreenFlower1.fullFlower9(da_size);
+            }
+        }
+
+        if (da_color == 3 && a_bool) {
+            if (da_petals == 1) {
+                PinkFlower1.fullFlower5(da_size);
+            }
+            if (da_petals == 2) {
+                PinkFlower1.fullFlower7(da_size);
+            }
+            if (da_petals == 3) {
+                PinkFlower1.fullFlower9(da_size);
+            }
+        }
+        pop();
+    }
+}
 
 
 
@@ -252,5 +330,3 @@ class PinkFlower {
         circle(70 / size, -35 / size, 100 / size);
     }
 }
-
-

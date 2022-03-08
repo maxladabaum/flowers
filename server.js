@@ -23,4 +23,18 @@ function newConnection(socket) {
         socket.broadcast.emit('click', data);
         console.log(data);
     }
+
+    socket.on('requestSync', clickMsg2);
+
+    function clickMsg2(data) {
+        socket.broadcast.emit('requestSync', data);
+        console.log(data);
+    }
+
+    socket.on('sentSync', clickMsg3);
+
+    function clickMsg3(data) {
+        socket.broadcast.emit('sentSync', data);
+        console.log(data);
+    }
 }
