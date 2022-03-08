@@ -128,8 +128,8 @@ function showFlowers() {
         var da_color = int(random(0,4));
         var da_petals = int(random(0,4));
         var da_size = random(2,4);
-        var transx = int(random(200,windowWidth-200));
-        var transy = int(random(200,windowWidth-200));
+        var transx = int(random(0,windowWidth-200));
+        var transy = int(random(0,windowHeight-200));
         var a_bool = true;
 
 
