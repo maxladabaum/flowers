@@ -122,13 +122,13 @@ function draw() {
 function showFlowers() {
     console.log('window width is '+ windowWidth);
     console.log('window height is '+ windowHeight);
-    // background(0);
+    background(0);
     
     for (var i = 0; i < 10; i++) {
 
         var da_color = int(random(0,4));
         var da_petals = int(random(0,4));
-        var da_size = random(1.5,3);
+        var da_size = random(2,4);
         var transx = int(random(0,windowWidth-200));
         var transy = int(random(0,windowWidth-200));
         var a_bool = true;
