@@ -18,27 +18,27 @@ var petal_pink;
 var pink_petal_width;
 var pink_petal_height;
 
+let font1;
+
 function setup() {
+    font1 = loadFont("Dion-vdDD.otf");
     initializeFields();
     createCanvas(windowWidth, windowHeight);
     GreenFlower1 = new GreenFlower();
     PinkFlower1 = new PinkFlower();
     RedFlower1 = new RedFlower();
 
-    socket = io.connect('https://give-flowers.herokuapp.com');
-    // socket = io.connect('http://localhost:3000')
+    //socket = io.connect('https://give-flowers.herokuapp.com');
+    socket = io.connect('http://localhost:3000')
     socket.on('sentSync', getSync);
     socket.on('requestSync', syncRequested);
     socket.on('click', updateSwitch);
-``
-    stroke(255);
+
     background(0);
-    fill(255);
-    textSize(36);
-    text("give flower", 40, 120);
-    text("request flower", 40, 220);
+    textFont(font1);
 
     requestSync();
+    homeScreen();
 }
 
 function initializeFields() {
@@ -74,38 +74,32 @@ function getSync(updatedSwitchVal){
 }
 
 function mouseClicked() {
-    if (mouseY>80 && mouseY<200) {
+    if (mouseX > windowWidth/2-157 && mouseX < windowWidth/2-157+300 && mouseY > 200 && mouseY < 300) {
         sendSwitchVal = 1;
         socket.emit('click', sendSwitchVal);
 
-        stroke(255);
         background(0);
-        fill(255);
-        textSize(36);
-        text("flowers sent", 40, 120);
+        fill(219,199,55,220);
+        textSize(48);
+        text("FLOWERS SENT", 40, 120);
     }
-    if (mouseY>200 && mouseY<400 && recSwitchVal > 0) {
+
+    if (mouseX > windowWidth/2-192 && mouseX < windowWidth/2-192+370 && mouseY > 400 && mouseY < 500 && recSwitchVal > 0) {
         sendSwitchVal = -1;
         socket.emit('click', sendSwitchVal);
-        
+
         showFlowers();
     }
-    if (mouseY>200 && mouseY<400 && recSwitchVal<=0) {
-        
-        stroke(255);
-        background(0);
-        fill(255);
-        textSize(36);
-        text("sorry, nobody sent you flowers", 40, 120);
-    }
-    if (mouseY>400) {
 
-        stroke(255);
+    if (mouseX > windowWidth/2-192 && mouseX < windowWidth/2-192+370 && mouseY > 400 && mouseY < 500 && recSwitchVal <= 0) {
+        
         background(0);
-        fill(255);
-        textSize(36);
-        text("give flower", 40, 120);
-        text("request flower", 40, 220);
+        fill(219,199,55,220);
+        textSize(48);
+        text("SORRY, NOBODY SENT YOU FLOWERS", 40, 120);
+    }
+    if (mouseY>500) {
+        homeScreen();
     }
     requestSync();
 }
@@ -114,7 +108,27 @@ function draw() {
 }
 
 
-
+function homeScreen() {
+    background(0);
+    noStroke();
+    
+    fill(219,199,55,220);
+    var width = 300;
+    rect(windowWidth/2-width/2-7,200,300,100,   8,8,8,8);
+    fill(0);
+    rect(windowWidth/2-width/2,207,286,86,   8,8,8,8);
+    fill(219,199,55,220);
+    textSize(48);
+    text("GIVE FLOWERS", windowWidth/2-width/2+8, 265);
+    
+    var width = 370;
+    rect(windowWidth/2-width/2-7,400,370,100,   8,8,8,8);
+    fill(0);
+    rect(windowWidth/2-width/2,407,356,86,   8,8,8,8);
+    fill(219,199,55,220);
+    textSize(48);
+    text("REQUEST FLOWERS", windowWidth/2-width/2+10, 465);
+}
 
 
 
@@ -127,7 +141,7 @@ function showFlowers() {
 
         var da_color = int(random(0,4));
         var da_petals = int(random(0,4));
-        var da_size = random(2,4);
+        var da_size = random(1.5,5);
         var transx = int(random(100,windowWidth-100));
         var transy = int(random(100,windowHeight-100));
         var a_bool = true;
