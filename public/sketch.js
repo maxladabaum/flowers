@@ -122,7 +122,7 @@ function draw() {
 function showFlowers() {
     console.log('window width is '+ windowWidth);
     console.log('window height is '+ windowHeight);
-    background(0);
+    // background(0);
     
     for (var i = 0; i < 10; i++) {
 
