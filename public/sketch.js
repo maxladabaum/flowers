@@ -88,7 +88,7 @@ function mouseClicked() {
         sendSwitchVal = -1;
         socket.emit('click', sendSwitchVal);
         
-        showFlowers2();
+        showFlowers();
     }
     if (mouseY>200 && mouseY<400 && recSwitchVal<=0) {
         
@@ -119,29 +119,7 @@ function draw() {
 
 
 
-
-
-
-
-
-
-
-
 function showFlowers() {
-    background(0);
-    translate(200,200);
-    RedFlower1.fullFlower9(1);
-    translate(200,200);
-    PinkFlower1.fullFlower7(1);
-    translate(200,250);
-    GreenFlower1.fullFlower7(1.3);
-    translate(-500,100);
-    PinkFlower1.fullFlower5(1);
-    translate(50,-300);
-    GreenFlower1.fullFlower5(1.4);
-}
-
-function showFlowers2() {
     console.log('window width is '+ windowWidth);
     console.log('window height is '+ windowHeight);
     background(0);
@@ -151,8 +129,8 @@ function showFlowers2() {
         var da_color = int(random(0,4));
         var da_petals = int(random(0,4));
         var da_size = random(0.7,3);
-        var transx = int(random(0,windowWidth));
-        var transy = int(random(0,windowWidth));
+        var transx = int(random(0,windowWidth-200));
+        var transy = int(random(0,windowWidth-200));
         var a_bool = true;
 
 
