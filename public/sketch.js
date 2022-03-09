@@ -1,4 +1,4 @@
-var socket
+var socket;
 
 let GreenFlower1;
 let PinkFlower1;
@@ -6,7 +6,6 @@ let RedFlower1;
 
 var sendSwitchVal;
 var recSwitchVal;
-var flowers_given;
 
 var petal_green;
 var green_petal_width;
@@ -17,34 +16,40 @@ var red_petal_height;
 var petal_pink;
 var pink_petal_width;
 var pink_petal_height;
+var already_sent;
+var screen;
 
 let font1;
 
-function setup() {
+function preload() {
     font1 = loadFont("Dion-vdDD.otf");
+}
+
+function setup() {
     initializeFields();
     createCanvas(windowWidth, windowHeight);
     GreenFlower1 = new GreenFlower();
     PinkFlower1 = new PinkFlower();
     RedFlower1 = new RedFlower();
 
-    socket = io.connect('https://give-flowers.herokuapp.com');
-    //socket = io.connect('http://localhost:3000')
+    //socket = io.connect('https://give-flowers.herokuapp.com');
+    socket = io.connect('http://localhost:3000')
     socket.on('sentSync', getSync);
     socket.on('requestSync', syncRequested);
     socket.on('click', updateSwitch);
 
     background(0);
-    textFont(font1);
 
     requestSync();
+    textFont(font1);
     homeScreen();
 }
 
 function initializeFields() {
     sendSwitchVal = 0;
     recSwitchVal = 0;
-
+    screen = "homeScreen";
+    already_sent = false;
     green_petal_width = 518 / 5;
     green_petal_height = 794 / 5;
     pink_petal_width = 521 / 5;
@@ -74,33 +79,46 @@ function getSync(updatedSwitchVal){
 }
 
 function mouseClicked() {
-    if (mouseX > windowWidth/2-157 && mouseX < windowWidth/2-157+300 && mouseY > 200 && mouseY < 300) {
-        sendSwitchVal = 1;
-        socket.emit('click', sendSwitchVal);
-
-        background(0);
-        fill(219,199,55,220);
-        textSize(48);
-        text("FLOWERS SENT", 40, 120);
+    if (mouseX > windowWidth/2-157 && mouseX < windowWidth/2-157+300 && mouseY > 200 && mouseY < 300 && screen == "homeScreen") {
+        if (already_sent== false){
+            sendSwitchVal = 1;
+            socket.emit('click', sendSwitchVal);
+            flowersSent();
+            screen = "flowersSent";
+        }
+        else {
+            alreadySent();
+            screen = "alreadySent";
+        }
+        already_sent = true;
     }
 
-    if (mouseX > windowWidth/2-192 && mouseX < windowWidth/2-192+370 && mouseY > 400 && mouseY < 500 && recSwitchVal > 0) {
-        sendSwitchVal = -1;
-        socket.emit('click', sendSwitchVal);
-
-        showFlowers();
-    }
-
-    if (mouseX > windowWidth/2-192 && mouseX < windowWidth/2-192+370 && mouseY > 400 && mouseY < 500 && recSwitchVal <= 0) {
-        
-        background(0);
-        fill(219,199,55,220);
-        textSize(48);
-        text("SORRY, NOBODY SENT YOU FLOWERS", 40, 120);
-    }
-    if (mouseY>500) {
+    if (screen == "showFlowers") {
         homeScreen();
+        screen = "homeScreen";
     }
+
+    if (mouseX > windowWidth/2-192 && mouseX < windowWidth/2-192+370 && mouseY > 400 && mouseY < 500 && screen == "homeScreen") {
+        if (recSwitchVal > 0) {
+            sendSwitchVal = -1;
+            socket.emit('click', sendSwitchVal);
+            showFlowers();
+            screen = "showFlowers"
+        }
+        else {
+            noFlowers();
+            screen = "noFlowers";
+        }
+    }
+
+    if (mouseX > 7*windowWidth/8-107 && mouseX < 7*windowWidth/8+ 107 && mouseY > 100 && mouseY < 200) {
+        if (screen == "noFlowers" || screen == "alreadySent" || screen == "flowersSent") {
+            homeScreen();
+            screen = "homeScreen";
+        }
+    }
+
+    
     requestSync();
 }
 
@@ -112,22 +130,81 @@ function homeScreen() {
     background(0);
     noStroke();
     
-    fill(219,199,55,220);
+    
+    fill(189, 42, 137,220);
     var width = 300;
     rect(windowWidth/2-width/2-7,200,300,100,   8,8,8,8);
-    fill(0);
+    fill(46, 144, 219,220);
     rect(windowWidth/2-width/2,207,286,86,   8,8,8,8);
     fill(219,199,55,220);
     textSize(48);
     text("GIVE FLOWERS", windowWidth/2-width/2+8, 265);
     
     var width = 370;
+    fill(189, 42, 137,220);
     rect(windowWidth/2-width/2-7,400,370,100,   8,8,8,8);
-    fill(0);
+    fill(46, 144, 219,220);
     rect(windowWidth/2-width/2,407,356,86,   8,8,8,8);
     fill(219,199,55,220);
     textSize(48);
     text("REQUEST FLOWERS", windowWidth/2-width/2+10, 465);
+}
+
+function flowersSent() {
+
+    background(0);
+    noStroke();
+    var width = 650;
+    textSize(48);
+    fill(219,199,55,220);
+    text("THANK YOU FOR SENDING FLOWERS", windowWidth/16, 165);
+    
+    var width = 200;
+    fill(189, 42, 137,220);
+    rect(7*windowWidth/8-width/2-7,100,200,100,   8,8,8,8);
+    fill(46, 144, 219,220);
+    rect(7*windowWidth/8-width/2,107,186,86,   8,8,8,8);
+    fill(219,199,55,220);
+    textSize(48);
+    text("GO BACK", 7*windowWidth/8-width/2+10, 165);
+}
+
+function noFlowers() {
+
+    background(0);
+    noStroke();
+    var width = 650;
+    textSize(48);
+    fill(219,199,55,220);
+    text("SORRY, NOBODY SENT YOU FLOWERS", windowWidth/16, 165);
+    
+    var width = 200;
+    fill(189, 42, 137,220);
+    rect(7*windowWidth/8-width/2-7,100,200,100,   8,8,8,8);
+    fill(46, 144, 219,220);
+    rect(7*windowWidth/8-width/2,107,186,86,   8,8,8,8);
+    fill(219,199,55,220);
+    textSize(48);
+    text("GO BACK", 7*windowWidth/8-width/2+10, 165);
+}
+
+function alreadySent() {
+
+    background(0);
+    noStroke();
+    var width = 650;
+    textSize(48);
+    fill(219,199,55,220);
+    text("YOU ALREADY SENT FLOWERS", windowWidth/16, 165);
+    
+    var width = 200;
+    fill(189, 42, 137,220);
+    rect(7*windowWidth/8-width/2-7,100,200,100,   8,8,8,8);
+    fill(46, 144, 219,220);
+    rect(7*windowWidth/8-width/2,107,186,86,   8,8,8,8);
+    fill(219,199,55,220);
+    textSize(48);
+    text("GO BACK", 7*windowWidth/8-width/2+10, 165);
 }
 
 
@@ -137,7 +214,7 @@ function showFlowers() {
     console.log('window width is '+ windowWidth);
     console.log('window height is '+ windowHeight);
     
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 15; i++) {
 
         var da_color = int(random(0,4));
         var da_petals = int(random(0,4));
