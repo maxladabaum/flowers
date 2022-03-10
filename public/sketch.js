@@ -18,6 +18,7 @@ var pink_petal_width;
 var pink_petal_height;
 var already_sent;
 var screen;
+var prev_screen
 
 let font1;
 
@@ -32,8 +33,8 @@ function setup() {
     PinkFlower1 = new PinkFlower();
     RedFlower1 = new RedFlower();
 
-    socket = io.connect('https://give-flowers.herokuapp.com');
-    //socket = io.connect('http://localhost:3000')
+    //socket = io.connect('https://give-flowers.herokuapp.com');
+    socket = io.connect('http://localhost:3000')
     socket.on('sentSync', getSync);
     socket.on('requestSync', syncRequested);
     socket.on('click', updateSwitch);
@@ -49,6 +50,7 @@ function initializeFields() {
     sendSwitchVal = 0;
     recSwitchVal = 0;
     screen = "homeScreen";
+    prev_screen = "other";
     already_sent = false;
     green_petal_width = 518 / 5;
     green_petal_height = 794 / 5;
@@ -79,6 +81,8 @@ function getSync(updatedSwitchVal){
 }
 
 function mouseClicked() {
+    prev_screen = "other";
+
     if (mouseX > windowWidth/2-157 && mouseX < windowWidth/2-157+300 && mouseY > 200 && mouseY < 300 && screen == "homeScreen") {
         if (already_sent== false){
             sendSwitchVal = 1;
@@ -93,17 +97,13 @@ function mouseClicked() {
         already_sent = true;
     }
 
-    if (screen == "showFlowers") {
-        homeScreen();
-        screen = "homeScreen";
-    }
-
     if (mouseX > windowWidth/2-192 && mouseX < windowWidth/2-192+370 && mouseY > 400 && mouseY < 500 && screen == "homeScreen") {
         if (recSwitchVal > 0) {
             sendSwitchVal = -1;
             socket.emit('click', sendSwitchVal);
             showFlowers();
-            screen = "showFlowers"
+            screen = "showFlowers";
+            prev_screen = "homeScreen";
         }
         else {
             noFlowers();
@@ -116,6 +116,11 @@ function mouseClicked() {
             homeScreen();
             screen = "homeScreen";
         }
+    }
+
+    if (screen == "showFlowers" && prev_screen != "homeScreen") {
+        homeScreen();
+        screen = "homeScreen";
     }
 
     
