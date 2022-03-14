@@ -27,4 +27,4 @@ and a random number of petals (5, 7, 9) are generated. Each flower is an object.
 
 ## Run Locally
 You can run this website locally on port 3000 (localhost:3000 in any browser). Instructions for running locally
-can be found in the docstrings of the sketch.js file.
+can be found in the docstrings of the sketch.js file. The sketch.js file is located in public/sketch.js
