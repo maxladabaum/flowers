@@ -1,6 +1,6 @@
 # Art 22 Final Project
 
-This website was created by Max Ladabaum for UCSB's Art 22 course taught by Prof. Kamandy.
+This website was created by Max Ladabaum for the final for UCSB's Art 22 course taught by Prof. Kamandy.
 All code was written by Max Ladabaum from 2/25-3/11.
 A node.js stencil was used for basic web structure. 
 
