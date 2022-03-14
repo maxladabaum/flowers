@@ -5,10 +5,14 @@
 // Documentation can be found in the README of the following public repo:
 // https://github.com/maxladabaum/flowers
 // 
-// How to run locally: 1) Using terminal, change directory into the folder
-// containing all of the project files (the folder is labeled “Max_Ladabaum_final_project”
+// How to run locally: 
+// 0) Clone the entire repo to you local computer.
+// 1) Using terminal, change directory into the folder
+// containing all of the project files you just cloned.
+// Note for Anshul + Prof Kamandy: a pre-cloned folder is labeled “Max_Ladabaum_final_project”
 // 2) Make sure you have node.js installed. If you don’t, install it now. 
-// 3) In terminal, while still in the directory from step 1, run the
+// 3) Change the socket.io connection to local in function setup()
+// 4) In terminal, while still in the directory from step 1, run the
 // command “node server.js”. The website should now run on localhost 
 // port 3000 (type localhost:3000 into any browser). 
 
@@ -52,12 +56,12 @@ function setup() {
     PinkFlower1 = new PinkFlower();
     RedFlower1 = new RedFlower();
 
-    //IMPORTANT!!!!!!!!!!
+    //IMPORTANT!!!!!!!!!! CHANGE SOCKET.IO CONNECTION
     //For public web, connect socket to heroku by uncommenting
     //the heroku connection and commenting out the local connection.
     //For local, connect socket to local by uncommenting the local
     //connection and commenting out the heroku connection.
-    //HEROKU CONNECTIOM
+    //HEROKU CONNECTION
     socket = io.connect('https://give-flowers.herokuapp.com');
     //LOCAL CONNECTION
     //socket = io.connect('http://localhost:3000')
