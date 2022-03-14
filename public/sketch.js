@@ -6,15 +6,25 @@
 // https://github.com/maxladabaum/flowers
 // 
 // How to run locally: 
-// 0) Clone the entire repo to you local computer.
+//
+// 0) Clone this entire repo to you local computer.
+// Note for Anshul + Prof Kamandy:
+// a pre-cloned folder is labeled “Max_Ladabaum_final_project”
+//
 // 1) Using terminal, change directory into the folder
 // containing all of the project files you just cloned.
-// Note for Anshul + Prof Kamandy: a pre-cloned folder is labeled “Max_Ladabaum_final_project”
-// 2) Make sure you have node.js installed. If you don’t, install it now. 
-// 3) Change the socket.io connection to local in function setup()
+//
+// 2) Make sure you have node.js with express installed. 
+// Also make sure you have socket.io installed.
+//
+// 3) Change the socket.io connection to LOCAL CONNECTION in
+// the setup() function in this sketch.js file.
+//
 // 4) In terminal, while still in the directory from step 1, run the
 // command “node server.js”. The website should now run on localhost 
 // port 3000 (type localhost:3000 into any browser). 
+// Note that there needs to be more than 1 client running in order to
+// send flower. You cannot sent flowers to yourself with only 1 client running.
 
 var socket;
 
